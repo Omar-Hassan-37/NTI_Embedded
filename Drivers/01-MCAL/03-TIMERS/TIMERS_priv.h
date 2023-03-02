@@ -1,0 +1,69 @@
+
+#ifndef _TIMERS_PRIV
+#define _TIMERS_PRIV
+
+
+#define TIMER0_NORMAL 		1
+#define TIMER0_CTC 			2
+#define TIMER0_FAST_PWM 	3
+#define TIMER0_PHASE_PWM 	4
+
+#define TIMER0_DIV_BY_1			1
+#define TIMER0_DIV_BY_8			5
+#define TIMER0_DIV_BY_64		8
+#define TIMER0_DIV_BY_256		10
+#define TIMER0_DIV_BY_1024		15
+
+
+#define TIMER0_NO_ACTION	100
+#define TIMER0_TOGGLE		12
+#define TIMER0_SET			20
+#define TIMER0_CLEAR		25
+
+#define TIMER1_NORMAL							0
+#define TIMER1_PWM_PHASE_CORRECT_8_BIT			1
+#define TIMER1_PWM_PHASE_CORRECT_9_BIT			2
+#define TIMER1_PWM_PHASE_CORRECT_10_BIT			3
+#define TIMER1_CTC_OCR1A						4
+#define TIMER1_FAST_PWM_8_BIT					5
+#define TIMER1_FAST_PWM_9_BIT					6
+#define TIMER1_FAST_PWM_10_BIT					7
+#define TIMER1_PHASE_FREQ_ICR1					8
+#define TIMER1_PHASE_FREQ_OCR1A					9
+#define TIMER1_PWM_PHASE_CORRECT_ICR1			10
+#define TIMER1_PWM_PHASE_CORRECT_OCR1A			11
+#define TIMER1_CTC_ICR1							12
+#define TIMER1_FAST_PWM_ICR1					14
+#define TIMER1_FAST_PWM_OCR1A					15
+
+#define TIMER1_DIV_BY_1			1
+#define TIMER1_DIV_BY_8			5
+#define TIMER1_DIV_BY_64		8
+#define TIMER1_DIV_BY_256		10
+#define TIMER1_DIV_BY_1024		15
+
+#define TIMER1_NORMAL_PORT_OPER					0
+#define TIMER1_TOGGLE							1
+#define TIMER1_CLEAR							2
+#define TIMER1_SET								3
+
+
+#define TIMER2_NORMAL 		1
+#define TIMER2_CTC 			2
+#define TIMER2_FAST_PWM 	3
+#define TIMER2_PHASE_PWM 	4
+
+#define TIMER2_DIV_BY_1			1
+#define TIMER2_DIV_BY_8			5
+#define TIMER2_DIV_BY_32		6
+#define TIMER2_DIV_BY_64		8
+#define TIMER2_DIV_BY_128		9
+#define TIMER2_DIV_BY_256		10
+#define TIMER2_DIV_BY_1024		15
+
+#define TIMER2_NO_ACTION	100
+#define TIMER2_TOGGLE		12
+#define TIMER2_SET			20
+#define TIMER2_CLEAR		25
+
+#endif
