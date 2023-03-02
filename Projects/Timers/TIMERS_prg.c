@@ -1,0 +1,560 @@
+
+#include "STD_TYPES.h"
+#include "BIT_MATH.h"
+#include "TIMERS_config.h"
+#include "TIMERS_int.h"
+#include "TIMERS_priv.h"
+#include "TIMERS_reg.h"
+
+static void (*TIMER0_OV_CallBack) (void) ;
+static void (*TIMER0_CTC_CallBack) (void) ;
+
+static void(*TIMER1_OV_CallBack) (void) ;
+static void(*TIMER1_CTC_CallBack_A) (void) ;
+static void(*TIMER1_CTC_CallBack_B) (void) ;
+
+static void (*TIMER2_OV_CallBack) (void) ;
+static void (*TIMER2_CTC_CallBack) (void) ;
+
+void TIMER0_void_Init(void)
+{
+	#if(TIMER0_MODE == TIMER0_NORMAL)
+		CLEAR_BIT(TCCR0 , TCCR0_WGM00);
+		CLEAR_BIT(TCCR0 , TCCR0_WGM01);
+	
+	#elif(TIMER0_MODE == TIMER0_CTC)
+		CLEAR_BIT(TCCR0 , TCCR0_WGM00);
+		SET_BIT(TCCR0 , TCCR0_WGM01);
+		
+	#elif(TIMER0_MODE == TIMER0_FAST_PWM )
+		SET_BIT(TCCR0 , TCCR0_WGM00);
+		SET_BIT(TCCR0 , TCCR0_WGM01);
+		
+	#elif(TIMER0_MODE == TIMER0_PHASE_PWM )
+		SET_BIT(TCCR0 , TCCR0_WGM00);
+		CLEAR_BIT(TCCR0 , TCCR0_WGM01);
+		
+	#endif
+	
+	#if(TIMER0_PRESCALER == TIMER0_DIV_BY_1)
+		SET_BIT(TCCR0 , TCCR0_CS00);
+		CLEAR_BIT(TCCR0 , TCCR0_CS01);
+		CLEAR_BIT(TCCR0 , TCCR0_CS02);
+	
+	#elif(TIMER0_PRESCALER == TIMER0_DIV_BY_8)
+		CLEAR_BIT(TCCR0 , TCCR0_CS00);
+		SET_BIT(TCCR0 , TCCR0_CS01);
+		CLEAR_BIT(TCCR0 , TCCR0_CS002);
+
+	#elif(TIMER0_PRESCALER == TIMER0_DIV_BY_64 )
+		SET_BIT(TCCR0 , TCCR0_CS00);
+		SET_BIT(TCCR0 , TCCR0_CS01);
+		CLEAR_BIT(TCCR0 , TCCR0_CS02);
+
+	#elif(TIMER0_PRESCALER == TIMER0_DIV_BY_256 )
+		CLEAR_BIT(TCCR0 , TCCR0_CS00);
+		CLEAR_BIT(TCCR0 , TCCR0_CS01);
+		SET_BIT(TCCR0 , TCCR0_CS03);
+
+	#elif(TIMER0_PRESCALER == TIMER0_DIV_BY_1024 )
+		SET_BIT(TCCR0 , TCCR0_CS00);
+		CLEAR_BIT(TCCR0 , TCCR0_CS01);
+		SET_BIT(TCCR0 , TCCR0_CS02);
+		
+	#endif
+	
+	#if(TIMER0_COM_EVENT == TIMER0_NO_ACTION)
+		CLEAR_BIT(TCCR0 , TCCR0_COM00);
+		CLEAR_BIT(TCCR0 , TCCR0_COM01);
+		
+	
+	#elif(TIMER0_COM_EVENT == TIMER0_TOGGLE)
+		SET_BIT(TCCR0 , TCCR0_COM00)
+		CLEAR_BIT(TCCR0 , TCCR0_COM01);
+	#elif(TIMER0_COM_EVENT == TIMER0_CLEAR )
+		CLEAR_BIT(TCCR0 , TCCR0_COM00);
+		SET_BIT(TCCR0 , TCCR0_COM01);
+	#elif(TIMER0_COM_EVENT == TIMER0_SET )
+		SET_BIT(TCCR0 , TCCR0_COM00);
+		SET_BIT(TCCR0 , TCCR0_COM01);
+
+		
+	#endif
+	/*Disable Interrupts*/
+	CLEAR_BIT(TIMSK , TIMSK_TOIE0);
+	CLEAR_BIT(TIMSK , TIMSK_OCIE0);
+	/*CLEAR FLAGS*/
+	SET_BIT(TIFR , TIFR_TOV0);
+	SET_BIT(TIFR , TIFR_OCF0);
+	/*Clear register*/
+	TCNT0 = 0 ;
+	OCR0 = 0 ;
+	
+	
+}
+
+void TIMER0_void_SetTimerReg(u8 Copy_uint8Val)
+{
+	TCNT0 = Copy_uint8Val ;
+}
+
+void TIMER0_void_SetCompareVal(u8 Copy_uint8Val)
+{
+	OCR0 = Copy_uint8Val ;
+}
+
+void TIMER0_void_EnableOVInt(void)
+{
+	SET_BIT(TIMSK , TIMSK_TOIE0);
+}
+
+void TIMER0_void_DisableOVInt(void)
+{
+	CLEAR_BIT(TIMSK , TIMSK_TOIE0);
+}
+
+void TIMER0_void_EnableCTCInt(void)
+{
+	SET_BIT(TIMSK , TIMSK_OCIE0);
+}
+
+void TIMER0_void_DisableCTCInt(void)
+{
+	CLEAR_BIT(TIMSK , TIMSK_OCIE0);
+}
+
+void TIMER0_void_SetOVCallBack(void (*Copy_ptr) (void) ) 
+{
+	TIMER0_OV_CallBack = Copy_ptr ;
+}
+
+void TIMER0_void_SetCTCCallBack(void (*Copy_ptr) (void) ) 
+{
+	TIMER0_CTC_CallBack = Copy_ptr ;
+	
+}
+
+void __vector_11(void) __attribute__((signal , used));
+void __vector_11(void)
+{
+	
+	TIMER0_OV_CallBack();
+}
+
+void __vector_10(void) __attribute__((signal , used));
+void __vector_10(void)
+{
+	
+	TIMER0_CTC_CallBack();
+}
+
+/************************************************************************************************************************************************/
+
+void TIMER1_void_Init(void)
+{
+	/*Set TIMER1 mode*/
+#if TIMER1_MODE == TIMER1_NORMAL
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PWM_PHASE_CORRECT_8_BIT
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PWM_PHASE_CORRECT_9_BIT
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PWM_PHASE_CORRECT_10_BIT
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_CTC_OCR1A
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_FAST_PWM_8_BIT
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_FAST_PWM_9_BIT
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_FAST_PWM_10_BIT
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PHASE_FREQ_ICR1
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PHASE_FREQ_OCR1A
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PWM_PHASE_CORRECT_ICR1
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_PWM_PHASE_CORRECT_OCR1A
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	CLEAR_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_CTC_ICR1
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_FAST_PWM_ICR1
+	CLEAR_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#elif TIMER1_MODE == TIMER1_FAST_PWM_OCR1A
+	SET_BIT(TCCR1A, TCCR1A_WGM10);
+	SET_BIT(TCCR1A, TCCR1A_WGM11);
+	SET_BIT(TCCR1B, TCCR1B_WGM12);
+	SET_BIT(TCCR1B, TCCR1B_WGM13);
+
+#endif
+
+/*Set TIMER1 prescaler*/
+#if(TIMER1_PRESCALER == TIMER1_DIV_BY_1)
+	SET_BIT(TCCR1B , TCCR1B_CS10);
+	CLEAR_BIT(TCCR1B , TCCR1B_CS11);
+	CLEAR_BIT(TCCR1B , TCCR1B_CS12);
+
+#elif(TIMER1_PRESCALER == TIMER1_DIV_BY_8)
+	CLEAR_BIT(TCCR1B, TCCR1B_CS10);
+	SET_BIT(TCCR1B , TCCR1B_CS11);
+	CLEAR_BIT(TCCR1B , TCCR1B_CS12);
+
+#elif(TIMER1_PRESCALER == TIMER1_DIV_BY_64 )
+	SET_BIT(TCCR1B , TCCR1B_CS10);
+	SET_BIT(TCCR1B , TCCR1B_CS11);
+	CLEAR_BIT(TCCR0 , TCCR1B_CS12);
+
+#elif(TIMER1_PRESCALER == TIMER1_DIV_BY_256 )
+	CLEAR_BIT(TCCR1B , TCCR1B_CS10);
+	CLEAR_BIT(TCCR1B , TCCR1B_CS11);
+	SET_BIT(TCCR1B , TCCR1B_CS12);
+
+#elif(TIMER1_PRESCALER == TIMER1_DIV_BY_1024 )
+	SET_BIT(TCCR1B , TCCR1B_CS10);
+	CLEAR_BIT(TCCR1B , TCCR1B_CS11);
+	SET_BIT(TCCR1B , TCCR1B_CS12);
+
+#endif
+
+/*Set TIMER1 event*/
+#if(TIMER1_COM_EVENT == TIMER1_NORMAL_PORT_OPER)
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1A0);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1B0);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1A1);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1B1);
+
+#elif(TIMER1_COM_EVENT == TIMER1_TOGGLE)
+	SET_BIT(TCCR1A , TCCR1A_COM1A0);
+	SET_BIT(TCCR1A , TCCR1A_COM1B0);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1A1);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1B1);
+
+#elif(TIMER1_COM_EVENT == TIMER1_CLEAR )
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1A0);
+	CLEAR_BIT(TCCR1A , TCCR1A_COM1B0);
+	SET_BIT(TCCR1A , TCCR1A_COM1A1);
+	SET_BIT(TCCR1A , TCCR1A_COM1B1);
+
+#elif(TIMER1_COM_EVENT == TIMER1_SET )
+	SET_BIT(TCCR1A , TCCR1A_COM1A0);
+	SET_BIT(TCCR1A , TCCR1A_COM1B0);
+	SET_BIT(TCCR1A , TCCR1A_COM1A1);
+	SET_BIT(TCCR1A , TCCR1A_COM1B1);
+
+
+#endif
+
+	/*Disable Interrupts*/
+	CLEAR_BIT(TIMSK , TIMSK_TOIE1);		/*Timer/Counter1 Overflow Interrupt Disable*/
+	CLEAR_BIT(TIMSK , TIMSK_OCIE1A);	/*Timer/Counter1 Output Compare Channel A Match Interrupt Disable*/
+	CLEAR_BIT(TIMSK , TIMSK_OCIE1B);	/*Timer/Counter1 Output Compare Channel B Match Interrupt Enable*/
+
+	/*CLEAR FLAGS*/
+	SET_BIT(TIFR , TIFR_TOV1);			/*Timer/Counter1 Overflow Flag*/
+	SET_BIT(TIFR , TIFR_OCF1A);			/*Timer/Counter1 Output Compare Channel A Match Flag*/
+	SET_BIT(TIFR , TIFR_OCF1B);			/*Timer/Counter1 Output Compare Channel B Match Flag*/
+
+	/*Clear register*/
+	TCNT1 = 0 ;							/*Timer/Countrer1 Register*/
+	OCR1A = 0 ;							/*Timer/Counter1 Output Compare Register channel A*/
+	OCR1B = 0 ;							/*Timer/Counter1 Output Compare Register channel B*/
+
+}
+
+void TIMER1_void_SetTimerReg(u8 Copy_uint8Val)
+{
+	TCNT1 = Copy_uint8Val;
+}
+
+void TIMER1_void_SetCompareVal_A(u8 Copy_uint8Val)
+{
+	OCR1A = Copy_uint8Val;
+}
+
+void TIMER1_void_SetCompareVal_B(u8 Copy_uint8Val)
+{
+	OCR1B = Copy_uint8Val;
+}
+
+void TIMER1_void_EnableOVInt(void)
+{
+	SET_BIT(TIMSK, TIMSK_TOIE1);
+}
+
+void TIMER1_void_DisableOVInt(void)
+{
+	CLEAR_BIT(TIMSK, TIMSK_TOIE1);
+}
+
+void TIMER1_void_EnableCTCInt_A(void)
+{
+	SET_BIT(TIMSK, TIMSK_OCIE1A);
+}
+
+void TIMER1_void_DisableCTCInt_A(void)
+{
+	CLEAR_BIT(TIMSK, TIMSK_OCIE1A);
+}
+
+void TIMER1_void_EnableCTCInt_B(void)
+{
+	SET_BIT(TIMSK, TIMSK_OCIE1B);
+}
+
+void TIMER1_void_DisableCTCInt_B(void)
+{
+	CLEAR_BIT(TIMSK, TIMSK_OCIE1B);
+}
+
+void TIMER1_void_SetOVCallBack(void (*Copy_ptr) (void) )
+{
+	if(Copy_ptr != NULL)
+	{
+		TIMER1_OV_CallBack = Copy_ptr;
+	}
+}
+
+void TIMER1_void_SetCTCCallBack_A(void (*Copy_ptr) (void) )
+{
+	if(Copy_ptr != NULL)
+	{
+		TIMER1_CTC_CallBack_A = Copy_ptr;
+	}
+}
+
+void TIMER1_void_SetCTCCallBack_B(void (*Copy_ptr) (void) )
+{
+	if(Copy_ptr != NULL)
+	{
+		TIMER1_CTC_CallBack_B = Copy_ptr;
+	}
+}
+
+void __vector_9(void) __attribute__((signal , used));
+void __vector_9(void)
+{
+
+	TIMER1_OV_CallBack();
+}
+
+void __vector_7(void) __attribute__((signal , used));
+void __vector_7(void)
+{
+
+	TIMER1_CTC_CallBack_A();
+}
+
+void __vector_8(void) __attribute__((signal , used));
+void __vector_8(void)
+{
+
+	TIMER1_CTC_CallBack_B();
+}
+
+/************************************************************************************************************************************************/
+
+void TIMER2_void_Init(void)
+{
+#if(TIMER2_MODE == TIMER2_NORMAL)
+	CLEAR_BIT(TCCR2 , TCCR2_WGM20);
+	CLEAR_BIT(TCCR2 , TCCR2_WGM21);
+
+#elif(TIMER2_MODE == TIMER2_CTC)
+	CLEAR_BIT(TCCR2 , TCCR2_WGM20);
+	SET_BIT(TCCR2 , TCCR2_WGM21);
+
+#elif(TIMER2_MODE == TIMER2_FAST_PWM )
+	SET_BIT(TCCR2 , TCCR2_WGM20);
+	SET_BIT(TCCR2 , TCCR2_WGM21);
+
+#elif(TIMER2_MODE == TIMER2_PHASE_PWM )
+	SET_BIT(TCCR2 , TCCR2_WGM00);
+	CLEAR_BIT(TCCR2 , TCCR2_WGM01);
+
+#endif
+
+#if(TIMER2_PRESCALER == TIMER2_DIV_BY_1)
+	SET_BIT(TCCR2 , TCCR2_CS20);
+	CLEAR_BIT(TCCR2 , TCCR2_CS21);
+	CLEAR_BIT(TCCR2 , TCCR2_CS22);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_8)
+	CLEAR_BIT(TCCR2 , TCCR2_CS20);
+	SET_BIT(TCCR2 , TCCR2_CS21);
+	CLEAR_BIT(TCCR2 , TCCR2_CS22);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_32)
+	SET_BIT(TCCR2 , TCCR2_CS20);
+	SET_BIT(TCCR2 , TCCR2_CS21);
+	CLEAR_BIT(TCCR2 , TCCR2_CS22);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_64 )
+	CLEAR_BIT(TCCR2 , TCCR2_CS20);
+	CLEAR_BIT(TCCR2 , TCCR2_CS21);
+	SET_BIT(TCCR2 , TCCR2_CS22);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_128 )
+	SET_BIT(TCCR2 , TCCR2_CS20);
+	CLEAR_BIT(TCCR2 , TCCR2_CS21);
+	SET_BIT(TCCR2 , TCCR2_CS22);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_256 )
+	CLEAR_BIT(TCCR2 , TCCR2_CS20);
+	SET_BIT(TCCR2 , TCCR2_CS21);
+	SET_BIT(TCCR2 , TCCR2_CS23);
+
+#elif(TIMER2_PRESCALER == TIMER2_DIV_BY_1024 )
+	SET_BIT(TCCR2 , TCCR2_CS20);
+	SET_BIT(TCCR2 , TCCR2_CS21);
+	SET_BIT(TCCR2 , TCCR2_CS22);
+
+#endif
+
+#if(TIMER2_COM_EVENT == TIMER2_NO_ACTION)
+	CLEAR_BIT(TCCR2 , TCCR2_COM20);
+	CLEAR_BIT(TCCR2 , TCCR2_COM21);
+
+
+#elif(TIMER2_COM_EVENT == TIMER2_TOGGLE)
+	SET_BIT(TCCR2 , TCCR2_COM20)
+	CLEAR_BIT(TCCR2 , TCCR2_COM21);
+#elif(TIMER2_COM_EVENT == TIMER2_CLEAR )
+	CLEAR_BIT(TCCR2 , TCCR2_COM20);
+	SET_BIT(TCCR2 , TCCR2_COM21);
+#elif(TIMER2_COM_EVENT == TIMER2_SET )
+	SET_BIT(TCCR2 , TCCR2_COM20);
+	SET_BIT(TCCR2 , TCCR2_COM21);
+
+	#endif
+
+	/*Disable Interrupts*/
+	CLEAR_BIT(TIMSK , TIMSK_TOIE2);			/*Timer/Counter2 Overflow Interrupt Enable*/
+	CLEAR_BIT(TIMSK , TIMSK_OCIE2);			/*Timer/Counter2 Output Compare Match Interrupt Enable*/
+
+	/*CLEAR FLAGS*/
+	SET_BIT(TIFR , TIFR_TOV2);				/*Timer/Counter2 Overflow Flag*/
+	SET_BIT(TIFR , TIFR_OCF2);				/*Timer/Counter2 Output Compare Flag*/
+
+	/*Clear register*/
+	TCNT2 = 0 ;								/*Timer/Countrer2 Register*/
+	OCR2 = 0 ;								/*Timer/Counter2 Output Compare Register*/
+
+
+}
+
+void TIMER2_void_SetTimerReg(u8 Copy_uint8Val)
+{
+	TCNT2 = Copy_uint8Val;
+}
+
+void TIMER2_void_SetCompareVal(u8 Copy_uint8Val)
+{
+	OCR2 = Copy_uint8Val;
+}
+
+void TIMER2_void_EnableOVInt(void)
+{
+	SET_BIT(TIMSK , TIMSK_TOIE2);
+}
+
+void TIMER2_void_DisableOVInt(void)
+{
+	CLEAR_BIT(TIMSK , TIMSK_TOIE2);
+}
+
+void TIMER2_void_EnableCTCInt(void)
+{
+	SET_BIT(TIMSK , TIMSK_OCIE2);
+}
+
+void TIMER2_void_DisableCTCInt(void)
+{
+	CLEAR_BIT(TIMSK , TIMSK_OCIE2);
+}
+
+void TIMER2_void_SetOVCallBack(void (*Copy_ptr) (void) )
+{
+	if(Copy_ptr != NULL)
+	{
+		TIMER2_OV_CallBack = Copy_ptr;
+	}
+}
+
+void TIMER2_void_SetCTCCallBack(void (*Copy_ptr) (void) )
+{
+	if(Copy_ptr != NULL)
+	{
+		TIMER2_CTC_CallBack = Copy_ptr;
+	}
+}
+
+void __vector_5(void) __attribute__((signal , used));
+void __vector_5(void)
+{
+
+	TIMER2_OV_CallBack();
+}
+
+void __vector_4(void) __attribute__((signal , used));
+void __vector_4(void)
+{
+
+	TIMER2_CTC_CallBack();
+}
