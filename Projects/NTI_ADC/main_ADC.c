@@ -29,6 +29,8 @@ void readADC_polling(u8 channel);
 
 void readADC_Interrupt(u8 channel);
 
+void readADC_Array_Polling(void);
+
 void readADC_Array(void);
 
 void display_ISR(void);
@@ -50,8 +52,8 @@ int main(void)
 
 	ADC_voidInit();
 	ADC_voidEnable();
-	EXT0_voidInit();
-	EXT_voidEnableGlobalInt();
+//	EXT0_voidInit();
+//	EXT_voidEnableGlobalInt();
 
 //	readADC_polling(0u);
 
@@ -59,7 +61,10 @@ int main(void)
 
 //	display_AutoTrigger();
 
-	readADC_Array();
+//	readADC_Array();
+
+	readADC_Array_Polling();
+
 
 	while(1)
 	{
@@ -102,6 +107,25 @@ void readADC_Interrupt(u8 channel)
 
 	/* start conversion */
 	ADC_voidStartConversion();
+}
+
+/****************************************************************/
+/* Description    : This function used to Read ADC Array by		 */
+/*					Polling										*/
+/*					Inputs : void								*/
+/*					Return : void								*/
+/****************************************************************/
+/* Pre_condition  :  this function must be used after ADC 		*/
+/*     				 initialized 							    */
+/****************************************************************/
+
+void readADC_Array_Polling(void)
+{
+	for(u8 i = 0; i < ADC_CHANNELS_SIZE; i++)
+	{
+		resultsArr[i] = ADC_u16ReadADCInMV(arr[i]);
+	}
+	display_ADC_Arr_values();
 }
 
 /****************************************************************/
