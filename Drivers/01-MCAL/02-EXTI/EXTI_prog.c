@@ -18,9 +18,9 @@
 /*********************** Component DIRECTIVES *******************/
 /****************************************************************/
 
-#include "EXTI0_int.h"
-#include "EXTI0_Config.h"
-#include "EXTI0_private.h"
+#include "EXTI_int.h"
+#include "EXTI_Config.h"
+#include "EXTI_private.h"
 #include "led.h"
 #include <util/delay.h>
 

@@ -2,24 +2,24 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  <Write File Name>
+ *       Module:  -
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef SPI_INT_H
+#define SPI_INT_H
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
-
+#include "std_types.h"
 
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -29,36 +29,35 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
 
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
 
- 
+
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+
+void SPI_voidMasterInit(void);
+
+void SPI_voidSlaveInit(void);
+
+u8 SPI_voidMasterSendByte(u8 data);
+
+u8 SPI_u8MasterRecieveByte(void);
+
+u8 SPI_voidSlaveSendByte(u8 data);
+
+u8 SPI_u8SlaveRecieveByte(void);
+
+void SPI_voidEnableInterrupt(void);
+
+void SPI_voidSPICallBackFunc(void (*Copy_ptrFunc)(void), u8 *buff);
+
+#endif  /* FILE_NAME_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: FILE_NAME.h
  *********************************************************************************************************************/

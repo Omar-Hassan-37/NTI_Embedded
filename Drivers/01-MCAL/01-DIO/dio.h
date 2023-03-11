@@ -43,11 +43,9 @@
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
 
-void dio_vidConfigChannel(dio_portId_t port, dio_channelId_t channel, dio_direction_t direction);
 void dio_vidWriteChannel(dio_portId_t port, dio_channelId_t channel, dio_level_t level);
-void dio_vidSetPortDir(dio_portId_t port, u8 direction);
-void dio_vidSetPortValue(dio_portId_t port, u8 value);
-void dio_vidWriteChannelGroup(dio_portId_t port,u8 value,u8 mask,u8 position);
+void dio_vidSetPortValue(u8 Copy_u8Port, u8 Copy_u8Value);
+void dio_vidWriteChannelGroup(dio_portId_t port,u8 value,u8 mask);
 void dio_vidFlipChannel(dio_portId_t port, dio_channelId_t channel);
 dio_level_t dio_dioLevelReadChannel(dio_portId_t port, dio_channelId_t channel);
 void dio_vidEnablePullUp(dio_portId_t port, dio_channelId_t channel);

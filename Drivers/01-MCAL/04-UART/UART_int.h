@@ -2,14 +2,14 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  uart.h
+ *       Module:  uart
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef UART_H_
+#define UART_H_
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -19,7 +19,36 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+
+#include "std_types.h"
+#include "bit_math.h"
+#include "defines.h"
+
+#include "UART_reg.h"
+#include "UART_priv.h"
+#include "UART_cfg.h"
+
+
+#define RX_BUFFER_SIZE				(25)
+
+#define UART_BAUDRATE_1200			(0x340)
+#define UART_BAUDRATE_2400			(0x1A0)
+#define UART_BAUDRATE_4800			(0xCF)
+#define UART_BAUDRATE_9600			(0x67)
+#define UART_BAUDRATE_19200			(0x51)
+#define UART_BAUDRATE_115200		(0x8)
+
+
+#define UART_5_BIT_DATA				(0<<UCSZ0_BIT_NO)
+#define UART_6_BIT_DATA				(1<<UCSZ0_BIT_NO)
+#define UART_7_BIT_DATA				(2<<UCSZ0_BIT_NO)
+#define UART_8_BIT_DATA				(3<<UCSZ0_BIT_NO)
+
+#define UART_1_STOP_BIT				(0<<USBS_BIT_NO)
+#define UART_2_STOP_BIT				(1<<USBS_BIT_NO)
+
+#define UART_EVEN_PARITY			(2<<UPM0_BIT_NO)
+#define UART_ODD_PARITY				(3<<UPM0_BIT_NO)
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -29,36 +58,28 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
-
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
+typedef struct
+{
+	u8 UART_tr_buff[2000];
+	u16 byte_index;
+}buffer;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
+//extern void (*UART_TX_CallBack)(void);
 
- 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+void UART_Init(u16 baudRate);
+void UART_TransmitChr(u8 data);
+void UART_TransmitStr(u8 *str);
+u8 UART_ReceiveChr(u8 *data);
+void UART_voidTxCallBack(void (*Copy_ptrFunc)(void));
+
+#endif  /* UART_H_ */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: uart.h
  *********************************************************************************************************************/

@@ -166,97 +166,35 @@ void dio_vidWriteChannel(dio_portId_t port, dio_channelId_t channel, dio_level_t
 }
 
 /******************************************************************************
-* \Syntax          :void dio_vidSetPortDir(dio_portId_t port, dio_channelId_t channel, dio_direction_t direction)
-* \Description     : this service for setting the direction of a port
-*
-* \Sync\Async      : Synchronous
-* \Reentrancy      : Non Reentrant
-* \Parameters (in) : port  -> MC port ID
-					 channel -> channel ID
-					 direction  -> INPUT/OUTPUT
-* \Return value:   : None
-*******************************************************************************/
-
-void dio_vidSetPortDir(dio_portId_t port, u8 direction)
-{
-
-	switch(port)
-	{
-		case DIO_PORTA:  DIO_DDRA_REG = direction; break;
-		case DIO_PORTB:  DIO_DDRB_REG = direction; break;
-		case DIO_PORTC:  DIO_DDRC_REG = direction; break;
-		case DIO_PORTD:  DIO_DDRD_REG = direction; break;
-		default: break;
-	}
-}
-
-/******************************************************************************
-* \Syntax          : dio_vidSetPortValue(io_portId_t port, u8 value)
-* \Description     : this service for setting the value of a port (HIGH/LOW)
+* \Syntax          :void dio_vidWriteChannelGroup
+						(dio_portId_t port,u8 value,u8 mask)
+* \Description     : this service for writting on group of IO channels                                    
 *                                                                             
 * \Sync\Async      : Synchronous                                               
 * \Reentrancy      : Non Reentrant                                             
 * \Parameters (in) : port  -> MC port ID
 					 value -> data value
+					 mask  -> data mask
 * \Return value:   : None                            
 *******************************************************************************/
 
-void dio_vidSetPortValue(dio_portId_t port, u8 value)
+void dio_vidSetPortValue(u8 Copy_u8Port, u8 Copy_u8Value)
 {
 
-    switch(port)
+    switch(Copy_u8Port)
     {
-        case DIO_PORTA:  DIO_PORTA_REG = value; break;
-        case DIO_PORTB:  DIO_PORTB_REG = value; break;
-        case DIO_PORTC:  DIO_PORTC_REG = value; break;
-        case DIO_PORTD:  DIO_PORTD_REG = value; break;
+        case DIO_PORTA:  DIO_PORTA_REG = Copy_u8Value; break;
+        case DIO_PORTB:  DIO_PORTB_REG = Copy_u8Value; break;
+        case DIO_PORTC:  DIO_PORTC_REG = Copy_u8Value; break;
+        case DIO_PORTD:  DIO_PORTD_REG = Copy_u8Value; break;
         default: break;
     }
 }
 
-
-/******************************************************************************
-* \Syntax          :void dio_vidWriteChannelGroup
-						(dio_portId_t port,u8 value,u8 mask, u8 position)
-* \Description     : this service for writting on group of IO channels
-*
-* \Sync\Async      : Synchronous
-* \Reentrancy      : Non Reentrant
-* \Parameters (in) : port  -> MC port ID
-					 value -> data value
-					 mask  -> data mask
-					 position -> starting position of the masking
-* \Return value:   : None
-*******************************************************************************/
-void dio_vidWriteChannelGroup(dio_portId_t port,u8 value,u8 mask, u8 position)
+void dio_vidWriteChannelGroup(dio_portId_t port,u8 value,u8 mask)
 {
-	/*	show me your code */
-	switch(port)
-	{
-		case DIO_PORTA:
-			DIO_PORTA_REG &= (~mask);
-			DIO_PORTA_REG |= value << position;
-			break;
 
-		case DIO_PORTB:
-			DIO_PORTB_REG &= (~mask);
-			DIO_PORTB_REG |= value << position;
-			break;
-
-		case DIO_PORTC:
-			DIO_PORTC_REG &= (~mask);
-			DIO_PORTC_REG |= value << position;
-			break;
-
-		case DIO_PORTD:
-			DIO_PORTD_REG &= (~mask);
-			DIO_PORTD_REG |= value << position;
-			break;
-
-		default: break;
-	}
 }
-
 
 /******************************************************************************
 * \Syntax          :void dio_vidFlipChannel
@@ -340,23 +278,10 @@ dio_level_t dio_dioLevelReadChannel(dio_portId_t port, dio_channelId_t channel)
 *******************************************************************************/
 void dio_vidEnablePullUp(dio_portId_t port, dio_channelId_t channel)
 {
-	/*	show me your code */
-	switch(port)
-	{
-		case DIO_PORTA:
-			SET_BIT(DIO_PORTA_REG, channel);
-			break;
-		case DIO_PORTB:
-			SET_BIT(DIO_PORTB_REG, channel);
-			break;
-		case DIO_PORTC:
-			SET_BIT(DIO_PORTC_REG, channel);
-			break;
-		case DIO_PORTD:
-			SET_BIT(DIO_PORTD_REG, channel);
-			break;
-	}
+	/*	show me your code */	
+	
 }
+
 /**********************************************************************************************************************
  *  END OF FILE: FileName.c
  *********************************************************************************************************************/

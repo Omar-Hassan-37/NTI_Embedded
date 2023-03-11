@@ -2,14 +2,14 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  <Write File Name>
+ *       Module:  -
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef SPI_REG_H
+#define SPI_REG_H
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -19,7 +19,21 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+#define SPCR			(*(volatile u8* )0x2D)				/*SPI Control Register*/
+#define SPCR_SPIE				7							/*SPI Interrupt Enable*/
+#define SPCR_SPE				6							/*SPI Enable*/
+#define SPCR_DORD				5							/*Data Order*/
+#define SPCR_MSTR				4							/*Master/Slave Select*/
+#define SPCR_CPOL				3							/*Clock Polarity*/
+#define SPCR_CPHA				2							/*Clock Phase*/
+#define SPCR_SPR1				1							/*SPI Clock Rate Select bit 1*/
+#define SPCR_SPR0				0							/*SPI Clock Rate Select bit 0*/
+
+#define SPSR			(*(volatile u8* )0x2E)				/*SPI Status Register*/
+#define SPSR_SPIF				7							/*SPI Interrupt Flag*/
+#define SPSR_SPI2X				0							/*Double SPI Speed Bit*/
+
+#define SPDR			(*(volatile u8* )0x2F)				/*SPI Data Register*/
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -29,36 +43,20 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
 
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
 
- 
+
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+
+
+#endif  /* FILE_NAME_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: FILE_NAME.h
  *********************************************************************************************************************/

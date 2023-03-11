@@ -70,7 +70,7 @@ static void enablePulse(void)
 void lcd_vidInit(void)
 {
 	dio_vidConfigChannel(LCD_RS_PORT, LCD_RS_CHANNEL, OUTPUT);
-	dio_vidConfigChannel(LCD_RW_PORT, LCD_RW_CHANNEL, OUTPUT);
+	//dio_vidConfigChannel(LCD_RW_PORT, LCD_RW_CHANNEL, OUTPUT);
 	dio_vidConfigChannel(LCD_EN_PORT, LCD_EN_CHANNEL, OUTPUT);
 
 	dio_vidConfigChannel(LCD_D4_PORT, LCD_D4_CHANNEL, OUTPUT);
@@ -104,7 +104,7 @@ void lcd_vidInit(void)
 void lcd_vidSendCmd(lcd_cmd_t cmd)
 {
 	/*	RS -> Command Mode	*/
-	dio_vidWriteChannel(LCD_RW_PORT, LCD_RW_CHANNEL, STD_LOW);
+	//dio_vidWriteChannel(LCD_RW_PORT, LCD_RW_CHANNEL, STD_LOW);
 	dio_vidWriteChannel(LCD_RS_PORT,LCD_RS_CHANNEL,STD_LOW);
 
 	dio_vidWriteChannel(LCD_D4_PORT,LCD_D4_CHANNEL,CHECK_BIT(cmd,4));
@@ -134,7 +134,7 @@ void lcd_vidSendCmd(lcd_cmd_t cmd)
 void lcd_vidSendData(u8 data)
 {
 	/*	RS -> Data Mode	*/
-	dio_vidWriteChannel(LCD_RW_PORT, LCD_RW_CHANNEL, STD_LOW);
+	//dio_vidWriteChannel(LCD_RW_PORT, LCD_RW_CHANNEL, STD_LOW);
 	dio_vidWriteChannel(LCD_RS_PORT,LCD_RS_CHANNEL,STD_HIGH);
 
 	dio_vidWriteChannel(LCD_D4_PORT,LCD_D4_CHANNEL,CHECK_BIT(data,4));
@@ -253,7 +253,7 @@ void lcd_vidDisplyNum(u32 num)
 	}
 	for(;iterator > 0; iterator--)
 	{
-		LCD_voidSendData('0' + (num_to_char_array[iterator-1]));
+		lcd_vidSendData('0' + (num_to_char_array[iterator-1]));
 	}
 }
 

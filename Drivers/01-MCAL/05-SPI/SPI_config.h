@@ -2,14 +2,14 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  <Write File Name>
+ *       Module:  -
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef SPI_CONFIG_H
+#define SPI_CONFIG_H
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -19,7 +19,25 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+#define SPI_PORT					DIO_PORTB
+#define SPI_SCK_PIN					DIO_PIN7
+#define SPI_MISO_PIN				DIO_PIN6
+#define SPI_MOSI_PIN				DIO_PIN5
+#define SPI_SS_PIN					DIO_PIN4
+
+
+
+/*
+SPI_CLK_DIVIDE_BY_4
+SPI_CLK_DIVIDE_BY_16
+SPI_CLK_DIVIDE_BY_64
+SPI_CLK_DIVIDE_BY_128
+SPI_CLK_DIVIDE_BY_2_2x
+SPI_CLK_DIVIDE_BY_8_2x
+SPI_CLK_DIVIDE_BY_32_2x
+SPI_CLK_DIVIDE_BY_64_2x
+ */
+#define SPI_SCK_FREQ			SPI_CLK_DIVIDE_BY_128
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -29,36 +47,20 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
 
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
 
- 
+
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+
+
+#endif  /* FILE_NAME_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: FILE_NAME.h
  *********************************************************************************************************************/

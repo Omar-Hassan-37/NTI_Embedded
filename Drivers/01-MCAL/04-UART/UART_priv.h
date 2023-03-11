@@ -2,14 +2,14 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  <Write File Name>
+ *       Module:  -
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef UART_PRIV_H_
+#define UART_PRIV_H_
 
 /**********************************************************************************************************************
  * INCLUDES
@@ -19,7 +19,24 @@
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+
+#define UART_CHAR_SIZE_5_BIT			0
+#define UART_CHAR_SIZE_6_BIT			1
+#define UART_CHAR_SIZE_7_BIT			2
+#define UART_CHAR_SIZE_8_BIT			3
+#define UART_CHAR_SIZE_9_BIT			7
+
+#define UART_MODE_ASYNCH				0
+#define UART_MODE_SYNCH					1
+
+#define UART_PARITY_EVEN				0
+#define UART_PARITY_ODD					1
+
+#define UART_STOP_BIT_1					0
+#define UART_STOP_BIT_2					1
+
+#define UART_CLK_RIS_FALL				0
+#define UART_CLK_FALL_RIS				1
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -29,36 +46,20 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
 
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
 
- 
+
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+void __vector_15(void) __attribute__(( signal , used ));
+
+#endif  /* FILE_NAME_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: FILE_NAME.h
  *********************************************************************************************************************/

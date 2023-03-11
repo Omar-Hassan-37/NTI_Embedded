@@ -2,25 +2,63 @@
 
  *  FILE DESCRIPTION
  *  -------------------------------------------------------------------------------------------------------------------
- *         File:  std_types.h
- *       Module:  lib
+ *         File:  <Write File Name>
+ *       Module:  -
  *
- *  Description:  standard data types definitions     
- *  
+ *  Description:  <Write File DESCRIPTION here>
+ *
  *********************************************************************************************************************/
-#ifndef STD_TYPES_H
-#define STD_TYPES_H
+#ifndef UART_CFG_H_
+#define UART_CFG_H_
 
 /**********************************************************************************************************************
  * INCLUDES
  *********************************************************************************************************************/
 
-
 /**********************************************************************************************************************
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
-#define NULL            ((void*)0)
+/*
+ * ENABLED
+ * DISABLED
+ * */
+#define UART_RX_INT					DISABLED
+#define UART_TX_INT					ENABLED
+#define UART_DATA_REG_INT			DISABLED
 
+/*
+ * UART_CHAR_SIZE_5_BIT
+ * UART_CHAR_SIZE_6_BIT
+ * UART_CHAR_SIZE_7_BIT
+ * UART_CHAR_SIZE_8_BIT
+ * UART_CHAR_SIZE_9_BIT
+ */
+#define UART_CHAR_SIZE				UART_CHAR_SIZE_8_BIT
+
+/*
+ * UART_MODE_ASYNCH
+ * UART_MODE_SYNCH
+ */
+#define UART_MODE_SELECT			UART_MODE_ASYNCH
+
+/*
+ * DISABLED
+ * UART_PARITY_EVEN
+ * UART_PARITY_ODD
+ */
+#define UART_PARITY_MODE			UART_PARITY_EVEN
+
+/*
+ * UART_STOP_BIT_1
+ * UART_STOP_BIT_2
+ */
+#define UART_STOP_BIT_SELECT		UART_STOP_BIT_1
+
+/*
+ * UART_CLK_RIS_FALL
+ * UART_CLK_FALL_RIS
+ */
+#define UART_CLK_POLARITY			UART_CLK_RIS_FALL			/*precondition: UART_MODE_SELECT must be UART_MODE_SYNCH first*/
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
  *********************************************************************************************************************/
@@ -29,36 +67,20 @@
 /**********************************************************************************************************************
  *  GLOBAL DATA TYPES AND STRUCTURES
  *********************************************************************************************************************/
-typedef unsigned char u8;
-typedef signed char s8;
 
-typedef unsigned short int  u16;
-typedef signed short int s16;
-
-typedef unsigned long int  u32;
-typedef signed long int s32;
-
-typedef float f32;
-typedef double f64;
-
-typedef unsigned char Std_ReturnType;
-typedef enum {
-	FALSE,
-	TRUE
-}boolean;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
  *********************************************************************************************************************/
 
- 
+
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION PROTOTYPES
  *********************************************************************************************************************/
-typedef void(*pf)(void);
- 
-#endif  /* STD_TYPES_H */
+
+
+#endif  /* FILE_NAME_H */
 
 /**********************************************************************************************************************
- *  END OF FILE: std_types.h
+ *  END OF FILE: FILE_NAME.h
  *********************************************************************************************************************/

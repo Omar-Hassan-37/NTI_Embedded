@@ -57,9 +57,9 @@ typedef enum
 
 typedef enum
 {
-    LOW = 0,
-    HIGH =  1
-}dio_level_t
+    STD_LOW = 0,
+    STD_HIGH =  1
+}dio_level_t;
 
 /**********************************************************************************************************************
  *  GLOBAL DATA PROTOTYPES
