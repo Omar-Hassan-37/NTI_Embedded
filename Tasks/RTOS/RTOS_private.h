@@ -11,7 +11,7 @@
 
 typedef struct 
 {
-	u16 periodicity;
+	u32 periodicity;
 	void (*taskFunc)(void);
 }Task_t;
 

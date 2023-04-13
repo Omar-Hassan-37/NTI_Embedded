@@ -12,7 +12,7 @@
 
 void RTOS_voidStart(void);
 
-void RTOS_voidCreateTask(u8 priority, u16 periodicity, void (*ptr_TaskFunc)(void));
+void RTOS_voidCreateTask(u8 priority, u32 periodicity, void (*ptr_TaskFunc)(void));
 
 
 

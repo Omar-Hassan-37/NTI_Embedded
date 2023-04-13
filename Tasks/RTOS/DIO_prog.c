@@ -151,34 +151,17 @@ u8 DIO_u8SetPinValue(u8 copy_u8Port,u8 Copy_u8PinNumber,u8 Copy_u8PinValue)
 }
 u8 DIO_u8SetPortValue(u8 copy_u8Port, u8 Copy_u8Value)
 {
-			u8 Local_u8ErrorState = OK;
-			
-			if(copy_u8Port<=DIO_u8PORTD)
-			{
-				if(Copy_u8Value == DIO_u8PORT_LOW || Copy_u8Value == DIO_u8PORT_HIGH)
-				{
-					switch (copy_u8Port)
-					{
-						case DIO_u8PORTA: PORTA=Copy_u8Value; break;
-						case DIO_u8PORTB: PORTB=Copy_u8Value; break;
-						case DIO_u8PORTC: PORTC=Copy_u8Value; break;
-						case DIO_u8PORTD: PORTD=Copy_u8Value; break;
-						default :Local_u8ErrorState =NOK;  break;
-						
-					}
+	 u8 local_u8ErrorState = OK;
 
-				}
-				else
-				{
-					Local_u8ErrorState=NOK;
-				}
-
-			}
-			else
-			{
-				Local_u8ErrorState=NOK;
-			}
-			return Local_u8ErrorState ;
+	    switch(copy_u8Port)
+	    {
+	        case DIO_u8PORTA:  PORTA = Copy_u8Value; break;
+	        case DIO_u8PORTB:  PORTB = Copy_u8Value; break;
+	        case DIO_u8PORTC:  PORTC = Copy_u8Value; break;
+	        case DIO_u8PORTD:  PORTD = Copy_u8Value; break;
+	        default:    local_u8ErrorState = NOK; break;
+	    }
+	    return local_u8ErrorState;
 	
 	
 }
@@ -214,9 +197,9 @@ u8 DIO_u8TogglePinValue(u8 copy_u8Port,u8 Copy_u8PinNumber,u8 Copy_u8counter)
 		switch(copy_u8Port)
 		{
 			case DIO_u8PORTA :TOG_BIT(PORTA,Copy_u8PinNumber); break;
-			case DIO_u8PORTB :while(Copy_u8counter != 0){TOG_BIT(PORTB,Copy_u8PinNumber); _delay_ms(500);Copy_u8counter--;} break;
-			case DIO_u8PORTC :while(Copy_u8counter != 0){TOG_BIT(PORTC,Copy_u8PinNumber); _delay_ms(500);Copy_u8counter--;} break;
-			case DIO_u8PORTD :while(Copy_u8counter != 0){TOG_BIT(PORTD,Copy_u8PinNumber); _delay_ms(500);Copy_u8counter--;} break;
+			case DIO_u8PORTB :{TOG_BIT(PORTB,Copy_u8PinNumber);} break;
+			case DIO_u8PORTC :{TOG_BIT(PORTC,Copy_u8PinNumber);} break;
+			case DIO_u8PORTD :{TOG_BIT(PORTD,Copy_u8PinNumber);} break;
 			default : Local_u8ErrorState = NOK ; break;
 		}
 		

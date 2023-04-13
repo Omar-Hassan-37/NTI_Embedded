@@ -11,6 +11,6 @@
 #define RTOS_CONFIG_H_
 
 /*Set the maximum number of max tasks in the system*/
-#define TASKS_NUMBER    3
+#define TASKS_NUMBER    4
 
 #endif
